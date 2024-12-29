@@ -1,47 +1,20 @@
-// // ***** Encoder *****
-// #define ENC_TICK (ENC_LINE_PER_REV * 2) // Рабочее кол-во импульсов
-// // #define EncoderPort                  PORTD                    // Порт "D", сконфигурирован как вход
-// #define Encoder_Init() \
-//   DDRD = B00000000;    \
-//   PORTD = B00001111 // подтяжка PIN_21, 20, 19, 18 // желательна внешняя подтяжка к +5 через 1К резисторы
-// #define Enc_Read (PIND & B00000010)
+#include <Encoder.h>
 
-#include <Arduino.h>
+Encoder::Encoder () {};
 
-#ifdef ARDUINO_AVR_MEGA2560
-#define DIRECTION_PORT DDRD;
-#define MODE_PORT PORTD;
-#define READ_PIN PIND;
-
-#define INT_0_PORT PORTD0;
-#endif
-
-#ifdef ARDUINO_AVR_NANO
-#define DIRECTION_PORT DDRD;
-#define MODE_PORT PORTD;
-#define READ_PIN PIND;
-
-#define INT_0_PORT PORTD2;
-#endif
-
-class Encoder
+void Encoder::init()
 {
-private:
-  uint32_t encTick = 0;
-
-public:
-  Encoder(uint32_t);
-  uint8_t read(uint8_t);
+    DDRD |= (1 << PD0);
+    PORTD |= (1 << PORTD0) | (1 << PORTD1) | (1 << PORTD2) | (1 << PORTD3);
 };
 
-Encoder::Encoder(uint32_t encTick) : encTick{encTick} {
-                                       // DIRECTION_PORT = 0;
-                                       // MODE_PORT = B00001111;
-                                     };
-
-uint8_t Encoder::read(uint8_t offset)
+void Encoder::update ()
 {
-  uint8_t mask = (1 << offset);
+    tick++;
+    // direction = static_cast<ENCODER_DIRECTION>(this->read() ? CW : CCW);
+};
 
-  return (PIND & mask);
+uint8_t Encoder::read ()
+{
+    return PIND & (1 << 1);
 };
