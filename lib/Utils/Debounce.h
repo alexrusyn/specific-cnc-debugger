@@ -1,3 +1,6 @@
+#ifndef DEBOUNCE_H
+#define DEBOUNCE_H
+
 unsigned long lastDebounceTime = 0;
 unsigned long lastISRTime = 0;
 
@@ -18,3 +21,5 @@ void isr_debounce(const unsigned long &timeNow, void fn(), unsigned long delay =
     }
     lastISRTime = timeNow;
 }
+
+#endif
