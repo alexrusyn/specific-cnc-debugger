@@ -1,21 +1,50 @@
 #ifndef FLAGS_H
 #define FLAGS_H
 
-template <class T>
+template <typename T>
 class Flags
 {
+    T buffer = 0;
+
 public:
     T get();
-    // void set(const T x);
+    void set(const T x);
 
-    // T mask(const T x);
-    // bool read(const T x);
+    void clear();
 
-private:
-    T buffer = 0;
+    T mask(const T x);
+    bool read(const T x);
 };
 
-#include "Flags.cpp"
+template <typename T>
+T Flags<T>::get()
+{
+    return buffer;
+};
+
+template <typename T>
+void Flags<T>::set(const T x)
+{
+    buffer |= x;
+}
+
+template <typename T>
+void Flags<T>::clear()
+{
+    buffer = 0;
+}
+
+template <typename T>
+T Flags<T>::mask(const T x)
+{
+    return buffer & x;
+}
+
+template <typename T>
+bool Flags<T>::read(const T x)
+{
+    return buffer & x;
+}
 
 #endif
 

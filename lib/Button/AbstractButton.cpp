@@ -1,3 +1,4 @@
+#include <Debounce.h>
 #include <AbstractButton.h>
 
 void AbstractButton::attach(Callback handler)
@@ -25,16 +26,19 @@ void AbstractButton::call()
 
 void AbstractButton::dispatch()
 {
-  this->statuses.get();
-  // statuses.set(1 << 0); // set first bit, as watching
+  statuses.set(1 << 0); // set first bit, as watching
 }
 
 void AbstractButton::tick(const unsigned long &time)
 {
-  // if (statuses.read(1 << 0))
-  // {
-  //   this->call();
-  // }
+  debounce(time, [this]()
+           {
+    if (this->statuses.read(1 << 0))
+    {
+      this->call();
+    }
+
+    statuses.clear(); });
 
   // if (time - tmr >= 100)
   // {
